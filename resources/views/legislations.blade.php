@@ -15,12 +15,12 @@
 
                         <!-- Floating Modern Controls -->
                         <div class="pdf-controls">
-                            <button id="prevPage"><i class="fa fa-chevron-right"></i></button>
+                            <button id="prevPage" disabled><i class="fa fa-chevron-right"></i></button>
                             <span class="page-indicator">📄 <span id="page-num">1</span> / <span id="page-count">?</span></span>
-                            <button id="nextPage"><i class="fa fa-chevron-left"></i></button>
+                            <button id="nextPage" disabled><i class="fa fa-chevron-left"></i></button>
 
 
-                            <button id="downloadPDF"><i class="fa fa-download"></i></button>
+                            <button id="downloadPDF" disabled><i class="fa fa-download"></i></button>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,10 @@
                 ctx = canvas.getContext('2d', { willReadFrequently: true }),
                 totalPages = 0,
                 loadingDiv = document.getElementById('loading'),
-                renderTask = null;
+                renderTask = null,
+                prevBtn = document.getElementById('prevPage'),
+                nextBtn = document.getElementById('nextPage'),
+                downloadBtn = document.getElementById('downloadPDF');
 
             loadingDiv.style.display = "block";
 
@@ -55,13 +58,18 @@
                 pdfDoc = pdf;
                 totalPages = pdf.numPages;
                 document.getElementById('page-count').textContent = totalPages;
+                updateControls();
                 renderPage(pageNum);
             }).catch(function (error) {
                 console.error("Error loading PDF:", error);
                 loadingDiv.textContent = "⚠️ تعذر تحميل القائمة";
+                prevBtn.disabled = nextBtn.disabled = downloadBtn.disabled = true;
             });
 
             function renderPage(num) {
+                if (!pdfDoc) {
+                    return;
+                }
                 if (renderTask) {
                     renderTask.cancel(); // ✅ Cancel previous rendering before starting new one
                 }
@@ -77,6 +85,7 @@
                     renderTask.promise.then(() => {
                         loadingDiv.style.display = "none"; // Hide loading indicator
                         renderTask = null; // Clear the render task after completion
+                        updateControls();
                     }).catch((err) => {
                         if (err.name !== "RenderingCancelledException") {
                             console.error("PDF Rendering Error:", err);
@@ -87,23 +96,21 @@
                 });
             }
 
-            document.getElementById('prevPage').addEventListener("click", function () {
+            prevBtn.addEventListener("click", function () {
                 if (pageNum > 1) {
                     pageNum--;
                     renderPage(pageNum);
                 }
             });
 
-            document.getElementById('nextPage').addEventListener("click", function () {
+            nextBtn.addEventListener("click", function () {
                 if (pageNum < totalPages) {
                     pageNum++;
                     renderPage(pageNum);
                 }
             });
 
-
-
-            document.getElementById('downloadPDF').addEventListener("click", function () {
+            downloadBtn.addEventListener("click", function () {
                 let link = document.createElement('a');
                 link.href = url;
                 link.download = 'CSResourceReferenceGuide.pdf';
@@ -111,6 +118,13 @@
                 link.click();
                 document.body.removeChild(link);
             });
+
+            function updateControls() {
+                const docIsReady = Boolean(pdfDoc);
+                prevBtn.disabled = !docIsReady || pageNum <= 1;
+                nextBtn.disabled = !docIsReady || pageNum >= totalPages;
+                downloadBtn.disabled = !docIsReady;
+            }
 
             document.addEventListener("keydown", function (event) {
                 if (event.key === "ArrowRight") document.getElementById("nextPage").click();
