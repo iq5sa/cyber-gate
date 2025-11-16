@@ -56,27 +56,28 @@
 
                         <!-- Mobile toggle -->
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-                            <span class="navbar-toggler-icon"></span>
+{{--                            <span class="navbar-toggler-icon"></span>--}}
+                            <i class="fas fa-bars"></i>
                         </button>
 
                         <!-- Centered nav links -->
                         <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
                             <ul class="navigation navbar-nav mb-2 mb-lg-0 gap-lg-4">
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">الرئيسية</a>
+                                    <a class="nav-link active" aria-current="page" href="{{route('home')}}">الرئيسية</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('legislations')}}">اللوائح والتشريعات</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">الإرشادات التوعوية</a>
+                                    <a class="nav-link" href="{{route('security_tips')}}">الإرشادات التوعوية</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">ابلاغ عن حادث</a>
+                                    <a class="nav-link" href="{{route('report_incident')}}">ابلاغ عن حادث</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">اطلب المساعدة</a>
+                                    <a class="nav-link" href="{{route('get_help')}}">الأسئلة الشائعة</a>
                                 </li>
                             </ul>
                         </div>
@@ -115,10 +116,10 @@
                     <div class="footer-widget">
                         <h4 class="fw-title">روابط سريعة</h4>
                         <ul class="footer-link">
-                            <li><a href="#">اللوائح والتشريعات</a></li>
-                            <li><a href="#">الإرشادات التوعوية</a></li>
-                            <li><a href="#">ابلاغ عن حادث </a></li>
-                            <li><a href="#">اطلب المساعدة</a></li>
+                            <li><a href="{{route('legislations')}}">اللوائح والتشريعات</a></li>
+                            <li><a href="{{route('security_tips')}}">الإرشادات التوعوية</a></li>
+                            <li><a href="{{route('report_incident')}}">ابلاغ عن حادث </a></li>
+                            <li><a href="{{route('get_help')}}">الأسئلة الشائعة</a></li>
                         </ul>
                     </div>
                 </div>

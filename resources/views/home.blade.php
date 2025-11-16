@@ -20,7 +20,7 @@
 
                                 <p class="wow fadeInUp" data-wow-delay=".4s">منصة إلكترونية تابعة لوحدة الأمن السيبراني في العتبة العباسية المقدسة، تهدف إلى نشر  اللوائح والتشريعات ،
                                     تقديم التوعية والإرشادات، وتوفير استمارة للإبلاغ عن الحوادث السيبرانية.</p>
-                                <a href="#" class="btn wow fadeInUp" data-wow-delay=".6s">
+                                <a href="{{route('legislations')}}" class="btn wow fadeInUp" data-wow-delay=".6s">
                                     <span class="text">اللوائح والتشريعات</span>
                                     <span class="shape"></span>
                                 </a>

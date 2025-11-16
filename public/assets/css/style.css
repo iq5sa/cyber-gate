@@ -45,7 +45,7 @@ body {
 	font-size: 16px;
 	color: #99A2AC;
 	font-style: normal;
-	line-height: 1.875;
+	line-height: 1.2;
 	background-color: #00172F;
 }
 img,
@@ -936,7 +936,7 @@ input[type=email]::placeholder{
 .breadcrumb-content .breadcrumb {
 	display: flex;
 	flex-wrap: wrap;
-	padding: 0 0;
+    padding: 15px 0px;
 	margin-bottom: 0;
 	list-style: none;
 	justify-content: center;
@@ -947,17 +947,17 @@ input[type=email]::placeholder{
 	font-weight: 500;
 	font-size: 15px;
 }
-.breadcrumb-content .breadcrumb-item+.breadcrumb-item::before {
-	padding-right: 13px;
-	color: #99A2AC;
-	content: '\f105';
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 600;
-	font-size: 16px;
-	opacity: .5;
+.breadcrumb-content .breadcrumb-item + .breadcrumb-item::before {
+    padding-right: 5px;
+    color: #99A2AC;
+    content: '\f104'; /* Left arrow */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 600;
+    font-size: 16px;
+    opacity: 0.5;
 }
 .breadcrumb-content .breadcrumb-item+.breadcrumb-item {
-	padding-left: 13px;
+	padding-right: 5px;
 }
 .breadcrumb-content .breadcrumb .breadcrumb-item a {
 	color: #99A2AC;
@@ -1276,8 +1276,8 @@ input[type=email]::placeholder{
 	padding: 118px 0 145px;
 }
 .section-title .title {
-	font-size: 56px;
-	line-height: 1.17;
+	font-size: 50px;
+	line-height: 2;
 	margin: 0 0 0;
 }
 .services-items-wrapper {
@@ -2842,7 +2842,7 @@ blockquote::before {
 .contact-form .form-grp {
 	margin: 0 0 40px;
 }
-.contact-form .form-grp input,
+.contact-form .form-grp input,.contact-form .form-grp select,
 .contact-form .form-grp textarea {
 	display: block;
 	background: transparent;
@@ -2855,7 +2855,8 @@ blockquote::before {
 .contact-form .form-grp textarea {
 	min-height: 155px;
 }
-.contact-form .form-grp input::placeholder,
+.contact-form .form-grp input::placeholder,.contact-form select:invalid,
+.contact-form input[type=date]:invalid,
 .contact-form .form-grp textarea::placeholder {
 	color: #6B7885;
 	font-size: 16px;
@@ -2869,7 +2870,29 @@ blockquote::before {
 	color: #00172F;
 }
 
-/* 24. 404 */
+/* أخفاء أيقونة التقويم في WebKit (Chrome, Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator{
+    opacity: 0;
+    display: none;
+    -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+.contact-form input[type="date"] {
+	appearance: none;
+    -webkit-appearance: none;
+    background: url(/assets/img/icons/calendar.svg) no-repeat right 1rem center;
+    background-size: 20px;
+
+
+}
+
+
+/* 24. 404
 .error-area {
 	padding: 290px 0 180px;
 }
@@ -3113,3 +3136,10 @@ blockquote::before {
   }
 
 }
+
+
+.table tbody tr td {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+

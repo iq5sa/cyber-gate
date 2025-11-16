@@ -61,7 +61,7 @@
 	margin: 0 0 50px;
 }
 .section-title .title {
-	font-size: 48px;
+	font-size: 42px;
 }
 .services-items-wrapper {
 	padding: 0 0;
@@ -118,7 +118,7 @@
 	padding: 110px 0 120px;
 }
 .blog-post-content .title {
-	font-size: 23px;
+	font-size: 16px;
 }
 .footer-contact-info .email {
 	font-size: 26px;
@@ -207,9 +207,9 @@
 	padding: 120px 0px 120px;
 }
 .breadcrumb-content .title {
-	font-size: 78px;
+	font-size: 72px;
 	line-height: 1;
-	margin: 0 0 5px;
+	margin: 0 0 25px;
 }
 .breadcrumb-area {
 	padding: 190px 0 90px;
@@ -977,7 +977,7 @@ blockquote {
 	padding: 120px 0 0;
 }
 .breadcrumb-content .title {
-	font-size: 52px;
+	font-size: 46px;
 }
 .breadcrumb-area {
 	padding: 150px 0 70px;
@@ -1206,7 +1206,7 @@ blockquote::before {
 	width: 90%;
 }
 .breadcrumb-content .title {
-	font-size: 70px;
+	font-size: 66;
 }
 .breadcrumb-area {
 	padding: 160px 0 70px;
