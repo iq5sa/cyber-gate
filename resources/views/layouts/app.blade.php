@@ -8,22 +8,29 @@
     <link rel="shortcut icon" href="{{asset('assets/img/favicon/favicon.ico')}}" type="image/x-icon">
 
 
-		<!-- CSS here -->
-        <link rel="stylesheet" href="{{asset('assets/css/bootstrap.rtl.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/animate.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/magnific-popup.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/fontawesome-all.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/odometer.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/flaticon.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/slick.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/default.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
-        @yield("css")
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.rtl.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/animate.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/fontawesome-all.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/odometer.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/slick.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/default.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
+
+    <!-- dropzone-->
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css"/>
+
+    @yield("css")
+
+
 </head>
 <body>
-   <!-- preloader -->
-   <div id="preloader">
+<!-- preloader -->
+<div id="preloader">
     <div id="loading-center">
         <div id="loading-center-absolute">
             <div class="object" id="object_one"></div>
@@ -55,8 +62,9 @@
                         </a>
 
                         <!-- Mobile toggle -->
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-{{--                            <span class="navbar-toggler-icon"></span>--}}
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#mainNavbar">
+                            {{--                            <span class="navbar-toggler-icon"></span>--}}
                             <i class="fas fa-bars"></i>
                         </button>
 
@@ -90,7 +98,6 @@
     </div>
 
 
-
 </header>
 <!-- header-area-end -->
 
@@ -106,7 +113,8 @@
                     <div class="footer-widget">
                         <div class="footer-contact-info">
                             <h4 class="number">بـوابة الامن السيبراني</h4>
-                            <p class="text-justify mt-3">منصة إلكترونية تابعة لوحدة الأمن السيبراني في العتبة العباسية المقدسة، تهدف إلى نشر السياسات العامة،
+                            <p class="text-justify mt-3">منصة إلكترونية تابعة لوحدة الأمن السيبراني في العتبة العباسية
+                                المقدسة، تهدف إلى نشر السياسات العامة،
                                 تقديم التوعية والإرشادات، وتوفير استمارة للإبلاغ عن الحوادث السيبرانية.</p>
 
                         </div>
@@ -131,14 +139,15 @@
                                 <input type="email" required placeholder="البريد الالكتروني">
                             </div>
                             <button type="submit" class="btn">اشترك الان <span class="shape"></span></button>
-                            <p class="newsletter-alert"><span style="position: relative; right: -5px;">*</span>سوف يتم ارسال نصائح ارشادية الى بريدك الالكتروني</p>
+                            <p class="newsletter-alert"><span style="position: relative; right: -5px;">*</span>سوف يتم
+                                ارسال نصائح ارشادية الى بريدك الالكتروني</p>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
         <div class="copyright-wrap">
-            <p class="copyright-text">        &copy; {{ now()->year }} وحدة الأمن السيبراني - العتبة العباسية المقدسة
+            <p class="copyright-text"> &copy; {{ now()->year }} وحدة الأمن السيبراني - العتبة العباسية المقدسة
             </p>
         </div>
     </div>
@@ -146,9 +155,8 @@
 <!-- footer-start-end -->
 
 
-
 <!-- JS here -->
-   @yield("js")
+
 <script src="{{asset('assets/js/vendor/jquery-3.6.0.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
@@ -159,5 +167,7 @@
 <script src="{{asset('assets/js/ajax-form.js')}}"></script>
 <script src="{{asset('assets/js/wow.min.js')}}"></script>
 <script src="{{asset('assets/js/main.js')}}"></script>
+
+@yield("js")
 </body>
 </html>

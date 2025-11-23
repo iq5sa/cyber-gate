@@ -4,15 +4,32 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SecurityTipResource\Pages;
 use App\Models\SecurityTip;
+use Faker\Provider\Text;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+
 
 class SecurityTipResource extends Resource
 {
@@ -40,62 +57,133 @@ class SecurityTipResource extends Resource
         return $form
             ->schema([
 
-                TextInput::make('title')
-                    ->required()
-                    ->label('العنوان')
-                    ->reactive()
-                    ->afterStateUpdated(function (?string $state, callable $set) {
-                        $slug = Str::slug($state ?? '');
-                        $set('slug', $slug);
-                    }),
+                Section::make('التفاصيل الأساسية')
+                    ->collapsible()
+                    ->description('ادخل التفاصيل الأساسية لهذا المحتوى.')
+                    ->schema([
+                        Grid::make(1)
+                            ->schema([
+                                TextInput::make('title')
+                                    ->label('العنوان')
+                                    ->required()
+                                    ->reactive()
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                                    ->columnSpanFull(),
 
-                TextInput::make('slug')
-                    ->label('الرابط (slug)')
-                    ->required()
-                    ->helperText('يمكن تعديل هذا الرابط يدوياً إذا رغبت.'),
+                                TextInput::make('slug')
+                                    ->label('الرابط (Slug)')
+                                    ->required()
+                                    ->helperText('يمكن تعديل الرابط يدوياً إذا رغبت.')
+                                    ->columnSpanFull(),
+                            ]),
+                    ])->columnSpan(1),
 
-                RichEditor::make('content')
-                    ->label('المحتوى')
-                    ->required()
-                    ->columnSpan('full')
-                    ->toolbarButtons([
-                        'bold', 'italic', 'underline', 'strike',
-                        'h2', 'h3', 'bulletList', 'orderedList',
-                        'blockquote', 'link', 'codeBlock', 'undo', 'redo',
-                    ])
-                    ->maxLength(10000)
-                    ->helperText('اكتب المحتوى الكامل للمقال هنا. أدوات التنسيق متاحة.'),
+                Section::make('حالة وتاريخ النشر')
+                    ->collapsible()
+                    ->schema([
+                        ToggleButtons::make('status')
+                            ->inline()
+                            ->options([
+                                'draft' => 'مسودة',
+                                'published' => 'نشر',
+                                'archived' => 'ارشفة',
+                            ])->colors([
+                                'draft' => 'info',
+                                'published' => 'success',
+                                'archived' => 'warning',
+                            ])
+                            ->icons([
+                                'draft' => 'heroicon-o-pencil',
+                                'published' => 'heroicon-o-check-circle',
+                                'archived' => 'heroicon-o-archive-box',
+                            ])
+                            ->required()
+                            ->helperText('اختر حالة المحتوى.'),
 
-                FileUpload::make('image')
-                    ->label('الصورة الرئيسة')
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        '16:9', '4:3', '1:1', '2:3',
-                    ])
-                    ->directory('images')
-                    ->preserveFilenames()
-                    ->maxSize(5120) // in KB => 5 MB
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->helperText('قم برفع صورة (JPG، PNG، WEBP). الحجم الأقصى: 5 ميغابايت')
-                    ->required()
-                    ->downloadable()
-                    ->visibility('public'),
+                        DateTimePicker::make('created_at')
+                            ->native(false)
+                            ->label('تاريخ الإنشاء')
+                            ->default(now())
+                            ->helperText('يمكنك تعديل تاريخ إنشاء المحتوى إذا رغبت.')
+                            ->columnSpanFull(),
+                    ])->grow()->columnSpan(1),
 
-                FileUpload::make('video_path')
-                    ->label('ملف الفيديو')
-                    ->acceptedFileTypes(['video/mp4', 'video/ogg', 'video/webm'])
-                    ->maxSize(102400) // in KB => 100 MB
-                    ->helperText('الصيغ المسموح بها: MP4، OGG، WEBM. الحجم الأقصى: 100 ميغابايت')
-                    ->directory('videos')
-                    ->visibility('public')
-                    ->downloadable()
-                    ->previewable(),
+                Section::make('المحتوى التفصيلي')
+                    ->collapsible()
+                    ->description('اكتب المحتوى الكامل مع معاينة قبل النشر.')
+                    ->schema([
+                        Tabs::make('Content')
+                            ->tabs([
+                                Tabs\Tab::make('Write')
+                                    ->label('المحتوى')
+                                    ->schema([
+                                        MarkdownEditor::make('content')
+                                            ->label('')
+                                            ->reactive() // <-- make it live so placeholder updates
+                                            ->required(),
+                                    ]),
+                                Tabs\Tab::make('Preview')
+                                    ->label('معاينة')
+                                    ->schema([
+                                        Placeholder::make('preview')
+                                            ->label('')
+                                            ->content(function (GET $get){
+                                                $html = Str::markdown($get('content') ?? '');
+                                                return new HtmlString("
+                                                    <div class='prose prose-neutral max-w-none'>
+                                                        {$html}
+                                                    </div>
+                                                ");
+                                        })
+                                            ->columnSpan('full'),
+
+                                    ]),
+                            ]),
+
+//                        Split::make([
+//                            MarkdownEditor::make('content')
+//                                ->label('المحتوى')
+//                                ->required()
+//                                ->columnSpan(1)
+//                                ->helperText('أدوات تنسيق Markdown متاحة.'),
+//                        ])->columnSpan(1),
+                    ]),
 
 
-                TextInput::make('excerpt')
-                    ->label('عنوان الفيديو ان وجد')
-                    ->nullable(),
+                // --- Media Section ---
+                Section::make('الصورة الرئيسية والفيديو')
+                    ->description('قم برفع الصورة الرئيسية والفيديو.')
+                    ->schema([
+                        Split::make([
+                            FileUpload::make('image')
+                                ->label('الصورة الرئيسة')
+                                ->image()
+                                ->imageEditor()
+                                ->imageCropAspectRatio('4:3')
+                                ->directory('images')
+                                ->preserveFilenames()
+                                ->maxSize(5120)
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                ->helperText('رفع JPG، PNG، WEBP. الحجم الأقصى: 5 ميغابايت')
+                                ->required()
+                                ->downloadable()
+                                ->visibility('public'),
+
+                            FileUpload::make('video_path')
+                                ->label('ملف الفيديو')
+                                ->acceptedFileTypes(['video/mp4', 'video/ogg', 'video/webm'])
+                                ->maxSize(102400)
+                                ->directory('videos')
+                                ->visibility('public')
+                                ->downloadable()
+                                ->previewable()
+                                ->helperText('رفع MP4، OGG، WEBM. الحجم الأقصى: 100 ميغابايت'),
+                        ])->columnSpanFull(),
+
+
+                    ]),
+
 
             ]);
     }

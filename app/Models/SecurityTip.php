@@ -20,7 +20,8 @@ class SecurityTip extends Model
         'video_poster',
         "category_id",
         "is_published",
-        "published_at"
+        "published_at",
+        "status"
     ];
     public function category(): BelongsTo
     {

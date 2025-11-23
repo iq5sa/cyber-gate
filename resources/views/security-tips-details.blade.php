@@ -76,7 +76,9 @@
 
                                 <div class="post-body">
                                     {{$tip->excerpt}} <br>
-                                    {!! $tip->content !!}
+                                    <div class="prose prose-neutral max-w-none">
+                                        {!! str($tip->content)->markdown() !!}
+                                    </div>
                                 </div>
 
                                 @if($tip->video_path)
@@ -86,7 +88,6 @@
                                                 <div class="card shadow border-0 rounded-3 overflow-hidden">
                                                     <div class="card-header">
                                                         <i class="bi bi-camera-video-fill me-2 fs-4"></i>
-                                                        <span class="fw-bold">مشاهدة الفيديو</span>
                                                     </div>
 
                                                     <div class="card-body p-0">
