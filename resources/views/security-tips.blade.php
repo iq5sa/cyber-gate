@@ -52,13 +52,17 @@
                 </div>
 
 
-                <div class="row">
-                    <div class="col-12">
-                        <nav aria-label="Page navigation pagination-wrap">
-                            {{ $tips->links('vendor.pagination.bootstrap-5') }}
-                        </nav>
+                @if ($tips->hasPages())
+
+                    <div class="row">
+                        <div class="col-12">
+                            <nav aria-label="Page navigation pagination-wrap">
+                                {{ $tips->links('vendor.pagination.bootstrap-5') }}
+                            </nav>
+                        </div>
                     </div>
-                </div>
+
+                @endif
             </div>
         </section>
         <!-- blog-area-end -->

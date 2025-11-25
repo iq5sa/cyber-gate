@@ -40,7 +40,7 @@ class ReportResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('name')->required()->label('الاسم'),
+            TextInput::make('full_name')->required()->label('الاسم'),
             TextInput::make('email')->email()->required()->label('البريد الإلكتروني'),
 
             Select::make('incident_type')
@@ -83,17 +83,72 @@ class ReportResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            TextColumn::make('name')->searchable()->label('الاسم'),
-            TextColumn::make('incident_type')->label('نوع الحادث'),
-            TextColumn::make('incident_date')->label('تاريخ الحادث'),
-            TextColumn::make('created_at')->dateTime('Y-m-d')->label('تاريخ الإنشاء'),
+
+            TextColumn::make('full_name')
+                ->searchable()
+                ->sortable()
+            ->label('الاسم الكامل'),
+
+            TextColumn::make('phone')
+                ->label('رقم الهاتف')
+                ->sortable(),
+
+            TextColumn::make('reporter_role')
+                ->label('الصفة')
+                ->sortable(),
+
+            TextColumn::make('title')
+                ->label('عنوان البلاغ')
+                ->searchable(),
+
+            TextColumn::make('category')
+                ->label('نوع الحادث')
+                ->sortable(),
+
+            TextColumn::make('impact')
+                ->label('مستوى التأثير')
+                ->sortable(),
+
+            TextColumn::make('ongoing')
+                ->label('المشكلة مستمرة؟')
+               ->getStateUsing(fn ($record) => $record->ongoing ? 'نعم' : 'لا'),
+
+            TextColumn::make('who_affected')
+                ->label('من المتأثر؟')
+                ->sortable(),
+
+            TextColumn::make('sensitive_data')
+                ->label('هل البيانات حساسة؟')
+                ->sortable(),
+
+//            TextColumn::make('follow_up')
+//                ->label('طريقة المتابعة')
+//                ->sortable(),
+
+            TextColumn::make('status')
+                ->label('الحالة')
+                ->badge()
+                ->colors([
+                    'primary' => 'pending',
+                    'success' => 'resolved',
+                    'danger' => 'rejected',
+                ])
+                ->sortable(),
+
+            TextColumn::make('created_at')
+                ->label('تاريخ الإنشاء')
+                ->dateTime('Y-m-d H:i'),
+
+//            TextColumn::make('updated_at')
+//                ->label('آخر تعديل')
+//                ->dateTime('Y-m-d H:i'),
         ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+//                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+//                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

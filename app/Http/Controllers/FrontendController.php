@@ -21,19 +21,12 @@ class FrontendController extends Controller
 
     public function securityTips()
     {
-        // Fetch latest 12 published tips
-        $tips = SecurityTip::where('status', 'published')
+        // Get only published tips (is_published = 1)
+        $tips = SecurityTip::where('is_published', 1)
             ->latest()
             ->paginate(12);
 
-        // Handle empty dataset gracefully
-        if ($tips->isEmpty()) {
-            $tips = collect(); // empty collection
-        }
-
-        return view('security-tips', [
-            'tips' => $tips,
-        ]);
+        return view('security-tips', compact('tips'));
     }
 
     public function showTip($slug)

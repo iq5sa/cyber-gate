@@ -80,20 +80,22 @@
                             </div>
 
                             @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul class="mb-0">
-                                        @foreach ($errors->all() as $err)
-                                            <li>{{ $err }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                <script>
+                                    @foreach ($errors->all() as $error)
+                                        toastr.error("{{ $error }}");
+                                    @endforeach
+                                </script>
+                            @endif
+
+                            @if (session('success'))
+                                <script> toastr.success("{{ session('success') }}"); </script>
                             @endif
                         </div>
                     </div>
 
                     <div class="row justify-content-center">
                         <div class="col-xxl-8 col-xl-9 col-lg-10">
-                            <form id="reportForm" action="{{route('reports.index')}}"
+                            <form id="reportForm" action="{{route('reports.store')}}"
                                   method="post" enctype="multipart/form-data"
                                   novalidate
                                   class="contact-form">
@@ -370,16 +372,21 @@
 
     </main>
 
+
     <script>
-        Dropzone.autoDiscover = false;
-
-        new Dropzone("#unifiedUpload", {
-            maxFilesize: 10, // MB
-            acceptedFiles: "image/*,.pdf",
-            dictDefaultMessage: "اسحب الملفات هنا أو اضغط للرفع (صور أو PDF)",
-            addRemoveLinks: true,
-            dictRemoveFile: "إزالة الملف",
-        });
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('.contact-form');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        toastr.error('يرجى مراجعة جميع الحقول المطلوبة.', 'خطأ');
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
     </script>
-
 @endsection

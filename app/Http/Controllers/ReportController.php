@@ -8,100 +8,122 @@ use App\Models\ReportAttachment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-    //
-
-    public function index()
+    public function index(): View
     {
-        return view('reports.index'); // create a blade with your form (adjust path)
+        return view('reports.index');
     }
 
     public function store(StoreReportRequest $request)
     {
-        // Use DB transaction for safety
-        return DB::transaction(function () use ($request) {
-            // Normalize some fields
-            $ongoing = $this->normalizeBoolean($request->input('ongoing'));
-            $confirm = $request->has('confirm') && ($request->boolean('confirm') || $request->input('confirm') === 'on' || $request->input('confirm') === '1');
-            $agreePolicy = $request->has('agreePolicy') && ($request->boolean('agreePolicy') || $request->input('agreePolicy') === 'on' || $request->input('agreePolicy') === '1');
+        // All validation is handled by StoreReportRequest
+        $data = $request->validated();
 
-            // Generate unique reference e.g. SR-20251123-XXXX
+        return DB::transaction(function () use ($data, $request) {
+
+            // Normalize boolean fields
+            $ongoing = $this->normalizeBoolean($data['ongoing'] ?? null);
+            $confirm = $this->normalizeBoolean($data['confirm'] ?? false);
+            $agreePolicy = $this->normalizeBoolean($data['agreePolicy'] ?? false);
+
+            // Generate unique reference
             $reference = $this->generateReference();
 
+            // Create report
             $report = Report::create([
-                'full_name' => $request->input('fullName'),
-                'email' => $request->input('email'),
-                'phone' => $request->input('phone'),
-                'reporter_role' => $request->input('reporterRole'),
+                'full_name'      => $data['fullName'] ?? null,
+                'email'          => $data['email'],
+                'phone'          => $data['phone'] ?? null,
+                'reporter_role'  => $data['reporterRole'] ?? null,
 
-                'title' => $request->input('title'),
-                'category' => $request->input('category'),
-                'impact' => $request->input('impact'),
-                'ongoing' => $ongoing,
-                'who_affected' => $request->input('whoAffected'),
-                'sensitive_data' => $request->input('sensitiveData'),
-                'description' => $request->input('description'),
+                'title'          => $data['title'],
+                'category'       => $data['category'] ?? null,
+                'impact'         => $data['impact'] ?? null,
+                'ongoing'        => $ongoing,
+                'who_affected'   => $data['whoAffected'] ?? null,
+                'sensitive_data' => $data['sensitiveData'] ?? null,
+                'description'    => $data['description'],
 
-                'follow_up' => $request->input('followUp'),
-                'confirm' => $confirm,
-                'agree_policy' => $agreePolicy,
+                'follow_up'      => $data['followUp'] ?? null,
+                'confirm'        => $confirm,
+                'agree_policy'   => $agreePolicy,
 
-                'reference' => $reference,
-                'status' => 'pending',
+                'reference'      => $reference,
+                'status'         => 'pending',
             ]);
 
-            // Handle attachments (if any)
-            if ($request->hasFile('attachments')) {
-                $files = $request->file('attachments');
+            // Attach uploaded files (IDs or paths)
+            $attachments = $data['attachments'] ?? [];
+            $uploadToken = $data['upload_token'] ?? null;
 
-                foreach ($files as $file) {
-                    if (!$file->isValid()) {
-                        continue;
-                    }
-                    $originalName = $file->getClientOriginalName();
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = Str::uuid()->toString() . '.' . $extension;
-                    $storagePath = "reports/{$report->id}/{$filename}";
+            // Attach by provided IDs/paths
+            foreach ($attachments as $att) {
+                $attachment = is_numeric($att)
+                    ? ReportAttachment::find($att)
+                    : ReportAttachment::where('path', $att)->orWhere('filename', $att)->first();
 
-                    // store on public disk (run: php artisan storage:link)
-                    Storage::disk('public')->putFileAs("reports/{$report->id}", $file, $filename);
-
-                    ReportAttachment::create([
-                        'security_report_id' => $report->id,
-                        'original_name' => $originalName,
-                        'filename' => $filename,
-                        'mime_type' => $file->getClientMimeType(),
-                        'size' => $file->getSize(),
-                        'path' => $storagePath,
-                    ]);
+                if ($attachment && !$attachment->report_id) {
+                    $this->moveAttachmentToReport($attachment, $report->id);
                 }
             }
 
-            // Optionally: dispatch notifications/emails, etc.
+            // Handle orphan attachments by upload token
+            if ($uploadToken) {
+                ReportAttachment::where('upload_token', $uploadToken)
+                    ->whereNull('report_id')
+                    ->get()
+                    ->each(fn(ReportAttachment $att) => $this->moveAttachmentToReport($att, $report->id));
+            }
 
-            // Return response / redirect with reference
             return redirect()->route('reports.thanks')->with('reference', $reference);
         });
     }
 
+    public function show(Report $report): View
+    {
+        $report->load('attachments');
+        return view('reports.show', compact('report'));
+    }
+
+    /**
+     * Generate a unique reference number for the report.
+     */
     protected function generateReference(): string
     {
         $date = now()->format('Ymd');
         $unique = strtoupper(substr(Str::uuid()->toString(), 0, 8));
-        return "SR-{$date}-{$unique}";
+        return "R-$date-$unique";
     }
 
     /**
-     * Normalize strings like "نعم"/"لا" or "yes"/"no" into boolean
+     * Normalize boolean-like values.
      */
     protected function normalizeBoolean($value): bool
     {
-        if (is_bool($value)) {
-            return $value;
+        if (is_bool($value)) return $value;
+        $trueValues = ['نعم', 'yes', 'true', '1', 'on', 'y'];
+        return in_array(mb_strtolower((string)$value), array_map('mb_strtolower', $trueValues), true);
+    }
+
+    /**
+     * Move an uploaded attachment to the report folder and associate it.
+     */
+    protected function moveAttachmentToReport(ReportAttachment $attachment, int $reportId): void
+    {
+        $oldPath = $attachment->path;
+        $newDir = "reports/$reportId";
+        $newPath = "$newDir/$attachment->filename";
+
+        if (Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->move($oldPath, $newPath);
+            $attachment->path = $newPath;
         }
-        $trueValues = ['نعم', 'yes', 'true', '1', 'on', 'ي'];
-        return in_array(mb_strtolower((string) $value), array_map('mb_strtolower', $trueValues), true);
+
+        $attachment->report_id = $reportId;
+        $attachment->upload_token = null;
+        $attachment->save();
     }
 }

@@ -76,7 +76,7 @@ class SecurityTipResource extends Resource
                 Section::make('حالة وتاريخ النشر')
                     ->collapsible()
                     ->schema([
-                        ToggleButtons::make('status')
+                        ToggleButtons::make('status')->label('اختر حالة النشر')
                             ->inline()
                             ->options([
                                 'draft' => 'مسودة',
@@ -93,11 +93,11 @@ class SecurityTipResource extends Resource
                                 'archived' => 'heroicon-o-archive-box',
                             ])
                             ->required()
-                            ->helperText('اختر حالة المحتوى.'),
+                            ,
 
-                        DateTimePicker::make('created_at')
+                        DateTimePicker::make('published_at')
                             ->native(false)
-                            ->label('تاريخ الإنشاء')
+                            ->label('تاريخ النشر')
                             ->default(now())
                             ->helperText('يمكنك تعديل تاريخ إنشاء المحتوى إذا رغبت.')
                             ->columnSpanFull(),
@@ -188,7 +188,7 @@ class SecurityTipResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image')->label('الصورة'),
                 Tables\Columns\TextColumn::make('title')->label(__('dashboard.general.title')),
-                Tables\Columns\TextColumn::make('created_at')->label('تاريخ الانشاء')->dateTime(),
+                Tables\Columns\TextColumn::make('published_at')->label('تاريخ النشر')->date(),
             ])
             ->filters([
                 //
