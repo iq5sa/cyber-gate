@@ -38,7 +38,7 @@ return [
 
     ],
 
-    "incident_reports"=>[
+    "reports"=>[
         "label" => "تقرير حادث مستلم",
         "plural_label" => "تقارير الحوادث المستلمة",
     ]

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\IncidentReport;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Report;
 use Illuminate\Database\Seeder;
 
-class IncidentReportSeeder extends Seeder
+class ReportSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +15,7 @@ class IncidentReportSeeder extends Seeder
         $types = ['technical', 'security', 'hr', 'other'];
 
         for ($i = 0; $i < 10; $i++) {
-            IncidentReport::create([
+            Report::create([
                 'name' => fake()->name(),
                 'email' => fake()->safeEmail(),
                 'incident_type' => fake()->randomElement($types),

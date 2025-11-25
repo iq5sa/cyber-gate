@@ -81,7 +81,7 @@
                                     <a class="nav-link" href="{{route('security_tips')}}">الإرشادات التوعوية</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('report_incident')}}">ابلاغ عن حادث</a>
+                                    <a class="nav-link" href="{{route('reports.index')}}">ابلاغ عن حادث</a>
                                 </li>
 
                                 <li class="nav-item">
@@ -126,7 +126,7 @@
                         <ul class="footer-link">
                             <li><a href="{{route('legislations')}}">اللوائح والتشريعات</a></li>
                             <li><a href="{{route('security_tips')}}">الإرشادات التوعوية</a></li>
-                            <li><a href="{{route('report_incident')}}">ابلاغ عن حادث </a></li>
+                            <li><a href="{{route('reports.index')}}">ابلاغ عن حادث </a></li>
                             <li><a href="{{route('get_help')}}">الأسئلة الشائعة</a></li>
                         </ul>
                     </div>

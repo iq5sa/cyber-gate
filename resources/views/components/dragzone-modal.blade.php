@@ -86,7 +86,7 @@
 
             <div class="modal-body">
 
-                <form id="modalDropzone" class="dropzone" action="/upload/files" method="post" enctype="multipart/form-data" novalidate>
+                <form id="modalDropzone" name="attachments[]" multiple class="dropzone" action="/upload/files" method="post" enctype="multipart/form-data" novalidate>
                     <div class="dz-message" data-dz-message>
                         <div><i class="fa-solid fa-cloud-arrow-up fa-2x dz-icon"></i></div>
                         <div><strong>اسحب الملفات أو اضغط هنا</strong></div>

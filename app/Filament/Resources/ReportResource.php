@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\IncidentReportResource\Pages;
-use App\Filament\Resources\IncidentReportResource\RelationManagers;
-use App\Models\IncidentReport;
-use Filament\Forms;
+use App\Filament\Resources\ReportResource\Pages;
+use App\Models\Report;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -16,26 +14,25 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IncidentReportResource extends Resource
+
+class ReportResource extends Resource
 {
-    protected static ?string $model = IncidentReport::class;
+    protected static ?string $model = Report::class;
 
     public static function getNavigationLabel(): string
     {
-        return __("dashboard.incident_reports.plural_label");
+        return __("dashboard.reports.plural_label");
     }
 
     public static function getPluralLabel(): ?string
     {
-        return __("dashboard.incident_reports.plural_label");
+        return __("dashboard.reports.plural_label");
     }
 
     public static function getLabel(): ?string
     {
-        return __("dashboard.incident_reports.label");
+        return __("dashboard.reports.label");
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';
@@ -110,9 +107,9 @@ class IncidentReportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListIncidentReports::route('/'),
-            'create' => Pages\CreateIncidentReport::route('/create'),
-            'edit' => Pages\EditIncidentReport::route('/{record}/edit'),
+            'index' => Pages\ListReports::route('/'),
+            'create' => Pages\CreateReport::route('/create'),
+            'edit' => Pages\EditReport::route('/{record}/edit'),
         ];
     }
 }

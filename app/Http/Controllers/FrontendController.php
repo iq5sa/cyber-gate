@@ -62,10 +62,6 @@ class FrontendController extends Controller
     }
 
 
-    public function reportIncident()
-    {
-        return view('report-incident');
-    }
 
     public function faq()
     {

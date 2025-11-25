@@ -78,13 +78,26 @@
                                 <p class="text-muted">يرجى تعبئة النموذج التالي بدقة لتسهيل متابعة الحالة من قبل
                                     المختصين.</p>
                             </div>
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $err)
+                                            <li>{{ $err }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
                     <div class="row justify-content-center">
                         <div class="col-xxl-8 col-xl-9 col-lg-10">
-                            <form id="reportForm" action="#" method="post" enctype="multipart/form-data" novalidate
+                            <form id="reportForm" action="{{route('reports.index')}}"
+                                  method="post" enctype="multipart/form-data"
+                                  novalidate
                                   class="contact-form">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <!-- Reporter Information -->
                                 <div class="form-section">
                                     <div class="card report-form-card mb-3">
@@ -127,16 +140,18 @@
                                                 <div class="col-md-6">
 
 
-                                                        <label for="reporterRole" class="form-label required">أنت تقدّم البلاغ بصفتك:</label>
-                                                        <select id="reporterRole" name="reporterRole" class="form-select" required>
-                                                            <option value="" disabled selected>اختر صفتك</option>
-                                                            <option value="employee">موظّف</option>
-                                                            <option value="client">عميل / مستخدم</option>
-                                                            <option value="contractor">متعاقد</option>
-                                                            <option value="visitor">زائر</option>
-                                                            <option value="anonymous">مُبلِّغ مجهول</option>
-                                                        </select>
-                                                        <div class="invalid-feedback">يرجى تحديد صفتك.</div>
+                                                    <label for="reporterRole" class="form-label required">أنت تقدّم
+                                                        البلاغ بصفتك:</label>
+                                                    <select id="reporterRole" name="reporterRole" class="form-select"
+                                                            required>
+                                                        <option value="" disabled selected>اختر صفتك</option>
+                                                        <option value="employee">موظّف</option>
+                                                        <option value="client">عميل / مستخدم</option>
+                                                        <option value="contractor">متعاقد</option>
+                                                        <option value="visitor">زائر</option>
+                                                        <option value="anonymous">مُبلِّغ مجهول</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">يرجى تحديد صفتك.</div>
 
                                                 </div>
 
@@ -260,16 +275,19 @@
 
                                 <!-- Evidence & Attachments -->
                                 <div class="form-section mb-3">
+
                                     <div class="card report-form-card">
                                         <div class="card-header">
                                             <h5 class="card-title">الأدلة والمرفقات</h5>
                                         </div>
 
                                         <div class="card-body">
+
                                             <div class="row g-2">
                                                 <div class="col-md-12">
                                                     <div class="mb-4 text-center">
-                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dragZoneModal">
+                                                        <button type="button" class="btn btn-primary"
+                                                                data-bs-toggle="modal" data-bs-target="#dragZoneModal">
                                                             <i class="fas fa-upload"></i> ارفق الملفات
                                                         </button>
 
@@ -283,6 +301,7 @@
 
                                 </div>
 
+
                                 <!-- Reporter Preference & Consent -->
                                 <div class="form-section mb-3">
                                     <div class="card report-form-card">
@@ -293,13 +312,13 @@
                                             <div class="row">
                                                 <div class="col-md-12">
 
-                                                        <label for="followUp" class="form-label">طريقة المتابعة
-                                                            المفضلة</label>
-                                                        <select id="followUp" name="followUp" class="form-select">
-                                                            <option>البريد الإلكتروني</option>
-                                                            <option>الهاتف</option>
-                                                            <option>لا متابعة</option>
-                                                        </select>
+                                                    <label for="followUp" class="form-label">طريقة المتابعة
+                                                        المفضلة</label>
+                                                    <select id="followUp" name="followUp" class="form-select">
+                                                        <option>البريد الإلكتروني</option>
+                                                        <option>الهاتف</option>
+                                                        <option>لا متابعة</option>
+                                                    </select>
 
 
                                                 </div>
@@ -346,8 +365,8 @@
         </section>
         <!-- report-incident-area-end -->
 
-
         @include("components.dragzone-modal")
+
 
     </main>
 
