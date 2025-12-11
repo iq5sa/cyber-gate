@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
     <!-- dropzone-->
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css"/>
@@ -83,7 +81,7 @@
                                     <a class="nav-link" href="{{route('security_tips')}}">الإرشادات التوعوية</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('reports.index')}}">ابلاغ عن حادث</a>
+                                    <a class="nav-link" href="{{route('report_incident')}}">ابلاغ عن حادث</a>
                                 </li>
 
                                 <li class="nav-item">
@@ -107,7 +105,7 @@
 @yield("content")
 
 <!-- footer-start -->
-<footer class="footer-area footer-bg" data-background="{{asset('assets/img/bg/footer_bg.jpg')}}">
+<footer class="footer-area footer-bg" data-background="assets/img/bg/footer_bg.jpg">
     <div class="container">
         <div class="footer-top-wrap">
             <div class="row justify-content-between">
@@ -128,7 +126,7 @@
                         <ul class="footer-link">
                             <li><a href="{{route('legislations')}}">اللوائح والتشريعات</a></li>
                             <li><a href="{{route('security_tips')}}">الإرشادات التوعوية</a></li>
-                            <li><a href="{{route('reports.index')}}">ابلاغ عن حادث </a></li>
+                            <li><a href="{{route('report_incident')}}">ابلاغ عن حادث </a></li>
                             <li><a href="{{route('get_help')}}">الأسئلة الشائعة</a></li>
                         </ul>
                     </div>
@@ -164,7 +162,6 @@
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="{{asset('assets/js/jquery.odometer.min.js')}}"></script>
 <script src="{{asset('assets/js/jquery.appear.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{{asset('assets/js/particles.min.js')}}"></script>
 <script src="{{asset('assets/js/slick.min.js')}}"></script>
 <script src="{{asset('assets/js/ajax-form.js')}}"></script>

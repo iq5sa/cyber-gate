@@ -157,7 +157,7 @@ class SecurityTipResource extends Resource
                                 ->imageCropAspectRatio('4:3')
                                 ->directory('images')
                                 ->preserveFilenames()
-                                ->maxSize(5120)
+                                ->maxSize(10240)
                                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                 ->helperText('رفع JPG، PNG، WEBP. الحجم الأقصى: 5 ميغابايت')
                                 ->required()
@@ -167,12 +167,12 @@ class SecurityTipResource extends Resource
                             FileUpload::make('video_path')
                                 ->label('ملف الفيديو')
                                 ->acceptedFileTypes(['video/mp4', 'video/ogg', 'video/webm'])
-                                ->maxSize(102400)
+                                ->maxSize(2048000)
                                 ->directory('videos')
                                 ->visibility('public')
                                 ->downloadable()
                                 ->previewable()
-                                ->helperText('رفع MP4، OGG، WEBM. الحجم الأقصى: 100 ميغابايت'),
+                                ->helperText('رفع MP4، OGG، WEBM. الحجم الأقصى: 2 جيجابايت'),
                         ])->columnSpanFull(),
 
 
